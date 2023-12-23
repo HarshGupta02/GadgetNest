@@ -10,6 +10,11 @@ const path = require("path");
 
 dotenv.config({path : "backend/config/config.env"});
 
+app.use(cors({
+    origin : ["https://gadget-nest-api.vercel.app/"],
+    methods : ["POST","GET"],
+    credentials : true
+}));
 app.use(express.json({limit : '50mb'}));
 app.use(cors());
 app.use(cookieParser());
