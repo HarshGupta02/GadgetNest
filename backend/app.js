@@ -11,10 +11,11 @@ const path = require("path");
 dotenv.config({path : "backend/config/config.env"});
 
 app.use(cors({
-    origin : ["https://gadget-nest-api.vercel.app/"],
+    origin : ["*"],
     methods : ["POST","GET"],
     credentials : true
 }));
+
 app.use(express.json({limit : '50mb'}));
 app.use(cors());
 app.use(cookieParser());
@@ -26,15 +27,16 @@ const user = require("./routes/userRoute");
 const order = require("./routes/orderRoute");
 const payment = require("./routes/paymentRoute");
 
-app.get("/", (req, res) => {
-    // res.setHeader("Access-Control-Allow-Credentials", "true");
-    // res.send("API IS RUNNING");
-})
-
 app.use(`/api/v1`, product);
 app.use(`/api/v1`, user);
 app.use(`/api/v1`, order);
 app.use(`/api/v1`, payment);
+
+app.use(express.static(path.join(__dirname, '../frontend/build')));
+
+app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../frontend/build/index.html'));
+});
 
 app.use(errorMiddleware);
 
